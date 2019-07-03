@@ -8,10 +8,8 @@ defmodule Battleships.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      # Start the endpoint when the application starts
-      BattleshipsWeb.Endpoint
-      # Starts a worker by calling: Battleships.Worker.start_link(arg)
-      # {Battleships.Worker, arg},
+      BattleshipsWeb.Endpoint,
+      Battleships.Userlist
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
