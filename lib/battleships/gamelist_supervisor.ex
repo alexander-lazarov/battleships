@@ -7,7 +7,7 @@ defmodule Battheships.GamelistSupervisor do
       Battleships.GamesSupervisor
     ]
 
-    Supervisor.init(children, strategy: :one_for_one)
+    Supervisor.init(children, strategy: :one_for_all)
   end
 
   def start_link(init_arg) do
