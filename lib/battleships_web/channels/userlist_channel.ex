@@ -4,7 +4,7 @@ defmodule BattleshipsWeb.UserlistChannel do
   def join("userlist:join", %{"username" => username}, socket = %Phoenix.Socket{id: socket_id}) do
     case Battleships.UserlistServer.join(socket_id, username) do
       :ok ->
-        broadcast_list
+        broadcast_list()
         {:ok, socket}
 
       error ->
@@ -13,7 +13,14 @@ defmodule BattleshipsWeb.UserlistChannel do
   end
 
   def join("userlist:get", _message, socket) do
-    {:ok, socket}
+    {:ok, %{id: socket.id}, socket}
+  end
+
+  def join("userlist:" <> user_id, _message, socket) do
+    case user_id == socket.id do
+      true -> {:ok, socket}
+      false -> {:error, "not your channel"}
+    end
   end
 
   def handle_in("getusers", _, socket) do
@@ -23,7 +30,11 @@ defmodule BattleshipsWeb.UserlistChannel do
   end
 
   def handle_in("challenge", %{"user" => user}, socket) do
-    IO.puts("challenge #{user}")
+    if socket.id == user do
+      push(socket, "gameError", %{error: "Cannot start game with yourself"})
+    else
+      Battleships.GamelistServer.start_game(socket.id, user)
+    end
 
     {:noreply, socket}
   end
@@ -34,16 +45,15 @@ defmodule BattleshipsWeb.UserlistChannel do
     {:noreply, socket}
   end
 
-  def terminate(reason, socket) do
+  def terminate(_reason, socket) do
     Battleships.UserlistServer.leave(socket.id)
-    broadcast_list
+    broadcast_list()
 
     # TODO - fix return value
   end
 
   defp broadcast_list do
-    BattleshipsWeb.Endpoint.broadcast_from!(
-      self(),
+    BattleshipsWeb.Endpoint.broadcast(
       "userlist:get",
       "list",
       %{users: Battleships.UserlistServer.get()}

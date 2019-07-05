@@ -1,7 +1,9 @@
 <template>
   <section>
     <Join @connected="connected" v-if="!isConnected"/>
-    <Userlist v-if="isConnected"/>
+    <Userlist
+      v-if="isConnected && !inGame"
+      />
   </section>
 </template>
 
@@ -13,7 +15,8 @@ import Userlist from "./components/Userlist.vue"
 export default {
   data: function () {
     return {
-      isConnected: false
+      isConnected: false,
+      inGame: false
     };
   },
   mounted: function () {

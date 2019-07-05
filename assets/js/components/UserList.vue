@@ -9,6 +9,7 @@
         </a>
       </li>
     </ul>
+    <div v-if="error">{{ error }}</div>
   </section>
 </template>
 
@@ -16,12 +17,14 @@
 import {appSocket} from '../appSocket.js'
 
 var channel
+var privateChannel
 
 export default {
   data: function () {
     return {
       loading: true,
-      users: []
+      users: [],
+      error: null
     }
   },
   methods: {
@@ -29,6 +32,8 @@ export default {
       channel.push("getusers", {})
     },
     challengeUser(userName) {
+      this.error = null
+
       channel.push("challenge", {user: userName})
     }
   },
@@ -36,13 +41,33 @@ export default {
     channel = appSocket().channel("userlist:get")
 
     channel.join()
-      .receive("ok", resp => { this.refresh() })
       .receive("error", resp => { console.log("Error loading users:", resp) })
+      .receive("ok", function(resp) {
+        privateChannel = appSocket().channel("userlist:" + resp.id)
+
+        console.log('subscribed to', "userlist:" + resp.id)
+
+        privateChannel
+          .on("gameStart", resp => {
+            this.error = null
+
+            console.log("start game")
+          })
+
+        privateChannel.join()
+
+        this.refresh()
+      }.bind(this))
 
     channel
       .on("list", resp => {
         this.users = resp.users
         this.loading = false
+      })
+
+    channel
+      .on("gameError", resp => {
+        this.error = resp.error
       })
   }
 }
