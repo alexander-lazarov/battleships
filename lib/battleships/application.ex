@@ -9,7 +9,8 @@ defmodule Battleships.Application do
     # List all child processes to be supervised
     children = [
       BattleshipsWeb.Endpoint,
-      Battleships.UserlistServer
+      Battleships.UserlistServer,
+      Battleships.GamelistServer
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
