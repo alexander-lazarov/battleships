@@ -1,34 +1,29 @@
 <template>
   <section>
-    <Join :username="username"/>
+    <Join @connected="connected" v-if="!isConnected"/>
   </section>
 </template>
 
 <script>
-import {Socket} from "phoenix"
-import {Join} from "./components/Join.vue"
-
-var socket
+import {appSocket} from './appSocket.js'
+import Join from "./components/Join.vue"
 
 export default {
-  props: {
-    username: null,
-    channel: null
-  },
-  methods: {
-    join: function () {
-      console.log('join clicked')
-    }
+  data: function () {
+    return {
+      isConnected: false
+    };
   },
   mounted: function () {
-    socket = new Socket("/socket", {params: {}})
-    socket.connect()
-
-    let channel = socket.channel("battleships:join")
-
-    channel.join()
-      .receive("ok", resp => { console.log("Joined successfully", resp) })
-      .receive("error", resp => { console.log("Unable to join", resp) })
+    appSocket().connect()
+  },
+  methods: {
+    connected: function () {
+      this.isConnected = true
+    }
+  },
+  components: {
+    Join
   }
 };
 </script>

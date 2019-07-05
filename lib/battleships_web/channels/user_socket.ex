@@ -2,7 +2,7 @@ defmodule BattleshipsWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "battleships:join", BattleshipsWeb.RoomChannel
+  channel "userlist:*", BattleshipsWeb.UserlistChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
