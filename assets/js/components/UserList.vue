@@ -51,7 +51,7 @@ export default {
           .on("gameStart", resp => {
             this.error = null
 
-            console.log("start game")
+            this.$emit("gameStarted", resp.game_id)
           })
 
         privateChannel.join()

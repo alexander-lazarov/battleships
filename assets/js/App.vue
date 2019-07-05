@@ -3,7 +3,9 @@
     <Join @connected="connected" v-if="!isConnected"/>
     <Userlist
       v-if="isConnected && !inGame"
+      @gameStarted="gameStarted"
       />
+    <Game :game-id="gameId" v-if="isConnected && inGame" />
   </section>
 </template>
 
@@ -11,12 +13,14 @@
 import {appSocket} from './appSocket.js'
 import Join from "./components/Join.vue"
 import Userlist from "./components/Userlist.vue"
+import Game from "./components/Game.vue"
 
 export default {
   data: function () {
     return {
       isConnected: false,
-      inGame: false
+      inGame: false,
+      gameId: null
     };
   },
   mounted: function () {
@@ -25,11 +29,16 @@ export default {
   methods: {
     connected: function () {
       this.isConnected = true
+    },
+    gameStarted: function (gameId) {
+      this.gameId = gameId
+      this.inGame = true
     }
   },
   components: {
     Join,
-    Userlist
+    Userlist,
+    Game
   }
 };
 </script>

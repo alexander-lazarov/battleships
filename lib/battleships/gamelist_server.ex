@@ -16,6 +16,12 @@ defmodule Battleships.GamelistServer do
       %{game_id: game_id}
     )
 
+    BattleshipsWeb.Endpoint.broadcast(
+      "userlist:#{user1}",
+      "gameStart",
+      %{game_id: game_id}
+    )
+
     game_id
   end
 
