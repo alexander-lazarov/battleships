@@ -1,7 +1,7 @@
 defmodule BattleshipsWeb.RoomChannel do
   use Phoenix.Channel
 
-  def join("userlist:join", message, socket) do
+  def join("battleships:join", message, socket) do
     {:ok, socket}
   end
 

@@ -29,5 +29,7 @@ defmodule BattleshipsWeb.UserSocket do
   #     BattleshipsWeb.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
-  def id(_socket), do: nil
+  def id(_socket) do
+    "#{Enum.random(10..99)}-#{Enum.random(10..99)}-#{Enum.random(10..99)}"
+  end
 end
