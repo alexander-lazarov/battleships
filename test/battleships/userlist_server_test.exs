@@ -1,5 +1,5 @@
 defmodule Battleship.UserlistServerTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
     {:ok, _} = Application.ensure_all_started(:battleships)

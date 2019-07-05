@@ -1,8 +1,8 @@
 defmodule Battleships.GameServer do
   use GenServer
 
-  def init(_) do
-    {:ok, []}
+  def init(user1, user2) do
+    {:ok, Battleships.Game.new(user1, user2)}
   end
 
   def start_link(_) do
