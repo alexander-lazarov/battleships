@@ -48,7 +48,7 @@ defmodule Battleships.UserlistServer do
         {:reply, :username_in_use, state}
 
       {false, false} ->
-        {:reply, :ok, Map.put_new(state, id, Battleships.User.new(new_user))}
+        {:reply, :ok, Map.put_new(state, id, Battleships.User.new(id, new_user))}
     end
   end
 

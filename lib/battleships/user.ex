@@ -1,6 +1,6 @@
 defmodule Battleships.User do
   @derive Jason.Encoder
-  defstruct [:name]
+  defstruct [:id, :name]
 
-  def new(name), do: %__MODULE__{name: name}
+  def new(id, name), do: %__MODULE__{id: id, name: name}
 end

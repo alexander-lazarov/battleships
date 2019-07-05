@@ -4,7 +4,7 @@
     <div v-if="loading">Loading...</div>
     <ul v-else>
       <li v-for="user in users">
-        <a href="#" @click:stop="challengeUser(user)">
+        <a href="#" @click="challengeUser(user.id)">
           {{ user.name }}
         </a>
       </li>
@@ -29,7 +29,7 @@ export default {
       channel.push("getusers", {})
     },
     challengeUser(userName) {
-      console.log(userName)
+      channel.push("challenge", {user: userName})
     }
   },
   mounted: function() {

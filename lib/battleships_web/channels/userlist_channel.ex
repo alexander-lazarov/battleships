@@ -22,6 +22,18 @@ defmodule BattleshipsWeb.UserlistChannel do
     {:noreply, socket}
   end
 
+  def handle_in("challenge", %{"user" => user}, socket) do
+    IO.puts("challenge #{user}")
+
+    {:noreply, socket}
+  end
+
+  def handle_in(_, _, socket) do
+    IO.puts("Unknown message")
+
+    {:noreply, socket}
+  end
+
   def terminate(reason, socket) do
     Battleships.UserlistServer.leave(socket.id)
     broadcast_list
