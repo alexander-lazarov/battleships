@@ -3,7 +3,8 @@ defmodule Battheships.GamelistSupervisor do
 
   def init(_init_arg) do
     children = [
-      Battleships.GamelistServer
+      Battleships.GamelistServer,
+      Battleships.GamesSupervisor
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
