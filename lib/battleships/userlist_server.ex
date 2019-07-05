@@ -1,4 +1,4 @@
-defmodule Battleships.Userlist do
+defmodule Battleships.UserlistServer do
   use GenServer
 
   @type state :: %{required(username) => socket_id}

@@ -2,7 +2,7 @@ defmodule BattleshipsWeb.UserlistChannel do
   use Phoenix.Channel
 
   def join("userlist:join", %{"username" => username}, socket = %Phoenix.Socket{id: socket_id}) do
-    case Battleships.Userlist.join(socket_id, username) do
+    case Battleships.UserlistServer.join(socket_id, username) do
       :ok ->
         broadcast_list
         {:ok, socket}
@@ -17,13 +17,13 @@ defmodule BattleshipsWeb.UserlistChannel do
   end
 
   def handle_in("getusers", _, socket) do
-    push(socket, "list", %{users: Battleships.Userlist.get()})
+    push(socket, "list", %{users: Battleships.UserlistServer.get()})
 
     {:noreply, socket}
   end
 
   def terminate(reason, socket) do
-    Battleships.Userlist.leave(socket.id)
+    Battleships.UserlistServer.leave(socket.id)
     broadcast_list
 
     # TODO - fix return value
@@ -34,7 +34,7 @@ defmodule BattleshipsWeb.UserlistChannel do
       self(),
       "userlist:get",
       "list",
-      %{users: Battleships.Userlist.get()}
+      %{users: Battleships.UserlistServer.get()}
     )
   end
 end
