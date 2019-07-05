@@ -10,7 +10,7 @@ defmodule Battleships.Application do
     children = [
       BattleshipsWeb.Endpoint,
       Battleships.UserlistServer,
-      Battleships.GamelistServer
+      Battheships.GamelistSupervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
