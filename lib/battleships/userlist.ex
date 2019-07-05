@@ -30,14 +30,16 @@ defmodule Battleships.Userlist do
   def leave(user), do: GenServer.call(__MODULE__, {:leave, user})
 
   @spec handle_call(:get, any(), state()) :: {:reply, userlist(), state()}
-  def handle_call(:get, _from, state), do: {:reply, Map.values(state), state}
+  def handle_call(:get, _from, state) do
+    {:reply, Map.values(state), state}
+  end
 
   @spec handle_call({:join, socket_id(), username()}, any(), state()) ::
           {:reply, :ok | :username_in_use | :socket_id_in_use, state()}
   def handle_call({:join, id, new_user}, _from, state) do
     case {
       Map.has_key?(state, id),
-      Enum.member?(Map.values(state), new_user)
+      Enum.member?(Map.values(state) |> Enum.map(& &1.name), new_user)
     } do
       {true, _} ->
         {:reply, :socket_id_in_use, state}
@@ -46,7 +48,7 @@ defmodule Battleships.Userlist do
         {:reply, :username_in_use, state}
 
       {false, false} ->
-        {:reply, :ok, Map.put_new(state, id, new_user)}
+        {:reply, :ok, Map.put_new(state, id, Battleships.User.new(new_user))}
     end
   end
 

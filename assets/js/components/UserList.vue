@@ -3,7 +3,11 @@
     <h2>Users</h2>
     <div v-if="loading">Loading...</div>
     <ul v-else>
-      <li v-for="user in users">{{ user }}</li>
+      <li v-for="user in users">
+        <a href="#" @click:stop="challengeUser(user)">
+          {{ user.name }}
+        </a>
+      </li>
     </ul>
   </section>
 </template>
@@ -23,6 +27,9 @@ export default {
   methods: {
     refresh: function () {
       channel.push("getusers", {})
+    },
+    challengeUser(userName) {
+      console.log(userName)
     }
   },
   mounted: function() {

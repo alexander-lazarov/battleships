@@ -17,19 +17,19 @@ defmodule Battleship.UserlistTest do
 
   test "that a user can join" do
     assert :ok == Battleships.Userlist.join("id1", "user1")
-    assert Battleships.Userlist.get() == ["user1"]
+    assert Battleships.Userlist.get() |> Enum.map(& &1.name) == ["user1"]
   end
 
   test "that the same username cannot join twice" do
     assert :ok == Battleships.Userlist.join("id1", "user1")
     assert :username_in_use == Battleships.Userlist.join("id2", "user1")
-    assert Battleships.Userlist.get() == ["user1"]
+    assert Battleships.Userlist.get() |> Enum.map(& &1.name) == ["user1"]
   end
 
   test "that the same socket_id cannot join twice" do
     assert :ok == Battleships.Userlist.join("id1", "user1")
     assert :socket_id_in_use == Battleships.Userlist.join("id1", "user2")
-    assert Battleships.Userlist.get() == ["user1"]
+    assert Battleships.Userlist.get() |> Enum.map(& &1.name) == ["user1"]
   end
 
   test "id_exists?/1" do
