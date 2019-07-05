@@ -4,7 +4,13 @@ defmodule BattleshipsWeb.UserlistChannel do
   def join("userlist:join", %{"username" => username}, socket = %Phoenix.Socket{id: socket_id}) do
     case Battleships.Userlist.join(socket_id, username) do
       :ok ->
-        # TODO - emit the new user to everyone
+        BattleshipsWeb.Endpoint.broadcast_from!(
+          self(),
+          "userlist:get",
+          "list",
+          %{users: Battleships.Userlist.get()}
+        )
+
         {:ok, socket}
 
       error ->
@@ -12,13 +18,13 @@ defmodule BattleshipsWeb.UserlistChannel do
     end
   end
 
-  def handle_in("userlist:join", _message, socket), do: {:noreply, socket}
+  def join("userlist:get", _message, socket) do
+    {:ok, socket}
+  end
 
-  def join("userlist:get", _message, socket), do: {:ok, socket}
-  def handle_in("userlist:get", _message, socket), do: {:noreply, socket}
+  def handle_in("getusers", _, socket) do
+    push(socket, "list", %{users: Battleships.Userlist.get()})
 
-  def handle_out(event, payload, socket) do
-    IO.puts("handle out")
     {:noreply, socket}
   end
 

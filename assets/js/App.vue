@@ -1,12 +1,14 @@
 <template>
   <section>
     <Join @connected="connected" v-if="!isConnected"/>
+    <Userlist v-if="isConnected"/>
   </section>
 </template>
 
 <script>
 import {appSocket} from './appSocket.js'
 import Join from "./components/Join.vue"
+import Userlist from "./components/Userlist.vue"
 
 export default {
   data: function () {
@@ -23,7 +25,8 @@ export default {
     }
   },
   components: {
-    Join
+    Join,
+    Userlist
   }
 };
 </script>
