@@ -4,13 +4,7 @@ defmodule BattleshipsWeb.UserlistChannel do
   def join("userlist:join", %{"username" => username}, socket = %Phoenix.Socket{id: socket_id}) do
     case Battleships.Userlist.join(socket_id, username) do
       :ok ->
-        BattleshipsWeb.Endpoint.broadcast_from!(
-          self(),
-          "userlist:get",
-          "list",
-          %{users: Battleships.Userlist.get()}
-        )
-
+        broadcast_list
         {:ok, socket}
 
       error ->
@@ -29,8 +23,18 @@ defmodule BattleshipsWeb.UserlistChannel do
   end
 
   def terminate(reason, socket) do
-    # TODO - remove the user from the list
+    Battleships.Userlist.leave(socket.id)
+    broadcast_list
 
-    nil
+    # TODO - fix return value
+  end
+
+  defp broadcast_list do
+    BattleshipsWeb.Endpoint.broadcast_from!(
+      self(),
+      "userlist:get",
+      "list",
+      %{users: Battleships.Userlist.get()}
+    )
   end
 end
