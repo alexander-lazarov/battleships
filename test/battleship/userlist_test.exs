@@ -16,26 +16,42 @@ defmodule Battleship.UserlistTest do
   end
 
   test "that a user can join" do
-    assert :ok == Battleships.Userlist.join("user1")
+    assert :ok == Battleships.Userlist.join("id1", "user1")
     assert Battleships.Userlist.get() == ["user1"]
   end
 
-  test "that the same user cannot join twice" do
-    assert :ok == Battleships.Userlist.join("user1")
-    assert :in_use == Battleships.Userlist.join("user1")
+  test "that the same username cannot join twice" do
+    assert :ok == Battleships.Userlist.join("id1", "user1")
+    assert :username_in_use == Battleships.Userlist.join("id2", "user1")
     assert Battleships.Userlist.get() == ["user1"]
+  end
+
+  test "that the same socket_id cannot join twice" do
+    assert :ok == Battleships.Userlist.join("id1", "user1")
+    assert :socket_id_in_use == Battleships.Userlist.join("id1", "user2")
+    assert Battleships.Userlist.get() == ["user1"]
+  end
+
+  test "id_exists?/1" do
+    assert !Battleships.Userlist.id_exists?("id1")
+    Battleships.Userlist.join("id1", "user1")
+    assert Battleships.Userlist.id_exists?("id1")
+
+    Battleships.Userlist.leave("id1")
+    assert !Battleships.Userlist.id_exists?("id1")
   end
 
   test "that users can leave" do
-    Battleships.Userlist.join("user1")
-    assert Battleships.Userlist.leave("user1") == :ok
+    Battleships.Userlist.join("id1", "user1")
+    assert Battleships.Userlist.leave("id1") == :ok
     assert Battleships.Userlist.get() == []
   end
 
   test "that a user won't be able to leave twice" do
-    Battleships.Userlist.join("user1")
-    assert Battleships.Userlist.leave("user1") == :ok
-    assert Battleships.Userlist.leave("user1") == :unknown_user
+    Battleships.Userlist.join("id1", "user1")
+    assert Battleships.Userlist.leave("id1") == :ok
+    assert Battleships.Userlist.leave("id1") == :unknown_socket_id
+
     assert Battleships.Userlist.get() == []
   end
 end
