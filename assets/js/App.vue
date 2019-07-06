@@ -31,8 +31,8 @@ export default {
       this.isConnected = true
     },
     gameStarted: function (gameId) {
-      this.gameId = gameId
       this.inGame = true
+      this.gameId = gameId
     }
   },
   components: {

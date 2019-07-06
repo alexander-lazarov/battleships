@@ -40,6 +40,6 @@ defmodule Battleships.GamelistServerTest do
     assert Battleships.GamelistServer.user_in_game?("id1", game_id) == true
     assert Battleships.GamelistServer.user_in_game?("id2", game_id) == true
     assert Battleships.GamelistServer.user_in_game?("id3", game_id) == false
-    assert Battleships.GamelistServer.user_in_game?("id1", game_id + 1) == false
+    assert Battleships.GamelistServer.user_in_game?("id1", "#{game_id}zzz") == false
   end
 end
