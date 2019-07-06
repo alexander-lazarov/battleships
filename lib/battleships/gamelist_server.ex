@@ -29,6 +29,10 @@ defmodule Battleships.GamelistServer do
     GenServer.call(__MODULE__, {:end_game, game_id})
   end
 
+  def user_in_game?(user_id, game_id) do
+    GenServer.call(__MODULE__, {:user_in_game?, user_id, game_id})
+  end
+
   def handle_call({:start_game, user1, user2}, _from, state) do
     game_id = new_id()
 
@@ -48,6 +52,19 @@ defmodule Battleships.GamelistServer do
       false ->
         {:reply, :error, state}
     end
+  end
+
+  def handle_call({:user_in_game?, user_id, game_id}, _from, state) do
+    result =
+      case state |> Map.has_key?(game_id) do
+        true ->
+          Battleships.GameServer.user_in_game?(state[game_id], user_id)
+
+        false ->
+          false
+      end
+
+    {:reply, result, state}
   end
 
   defp new_id(), do: Enum.random(1..100)

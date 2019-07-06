@@ -3,6 +3,7 @@ defmodule BattleshipsWeb.UserSocket do
 
   ## Channels
   channel "userlist:*", BattleshipsWeb.UserlistChannel
+  channel "game:*", BattleshipsWeb.GameChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
