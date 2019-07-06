@@ -21,14 +21,14 @@ export default {
   },
   methods: {
     initGame: function() {
-      console.log('init game')
       channel = appSocket().channel(`game:${this.gameId}`)
-      channel.on("leave", resp => { this.leaveGame() })
+      channel.on("gameEnd", resp => { this.leaveGame() })
 
       channel.join()
     },
     leaveGame: function () {
-      console.log('leave game')
+      this.$emit('gameEnded')
+
       channel.leave()
     }
   },

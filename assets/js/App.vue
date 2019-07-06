@@ -5,7 +5,11 @@
       v-if="isConnected && !inGame"
       @gameStarted="gameStarted"
       />
-    <Game :game-id="gameId" v-if="isConnected && inGame" />
+    <Game
+      v-if="isConnected && inGame"
+      :game-id="gameId"
+      @gameEnded="gameEnded"
+      />
   </section>
 </template>
 
@@ -33,6 +37,10 @@ export default {
     gameStarted: function (gameId) {
       this.inGame = true
       this.gameId = gameId
+    },
+    gameEnded: function () {
+      this.inGame = false
+      this.gameId = null
     }
   },
   components: {

@@ -43,9 +43,7 @@ export default {
     channel.join()
       .receive("error", resp => { console.log("Error loading users:", resp) })
       .receive("ok", function(resp) {
-        privateChannel = appSocket().channel("userlist:" + resp.id)
-
-        console.log('subscribed to', "userlist:" + resp.id)
+        privateChannel = appSocket().channel(`userlist:${resp.id}`)
 
         privateChannel
           .on("gameStart", resp => {

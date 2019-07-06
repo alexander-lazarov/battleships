@@ -29,8 +29,8 @@ defmodule Battleships.GamelistServer do
     case GenServer.call(__MODULE__, {:end_game, game_id}) do
       :ok ->
         BattleshipsWeb.Endpoint.broadcast(
-          "game_id:#{game_id}",
-          "leave",
+          "game:#{game_id}",
+          "gameEnd",
           %{}
         )
 
