@@ -10,4 +10,15 @@ defmodule BattleshipsWeb.GameChannel do
         {:error, "Not allowed"}
     end
   end
+
+  def handle_in("leave", %{"game_id" => game_id}, socket) do
+    case Battleships.GamelistServer.user_in_game?(socket.id, game_id) do
+      true ->
+        Battleships.GamelistServer.end_game(game_id)
+        {:noreply, socket}
+
+      false ->
+        {:noreply, socket}
+    end
+  end
 end

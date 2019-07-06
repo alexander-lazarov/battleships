@@ -1,6 +1,7 @@
 <template>
   <section>
     Game {{ gameId }}
+    <input type="button" value="Leave" @click="sendLeave" />
   </section>
 </template>
 
@@ -30,6 +31,9 @@ export default {
       this.$emit('gameEnded')
 
       channel.leave()
+    },
+    sendLeave: function () {
+      channel.push("leave", {game_id: this.gameId})
     }
   },
   mounted: function() {

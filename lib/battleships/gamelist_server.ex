@@ -50,12 +50,6 @@ defmodule Battleships.GamelistServer do
 
     {:ok, game_server} = Battleships.GamesSupervisor.start_child(user1, user2)
 
-    Task.async(fn ->
-      Process.sleep(4000)
-
-      __MODULE__.end_game(game_id)
-    end)
-
     {:reply, game_id, state |> Map.put(game_id, game_server)}
   end
 
